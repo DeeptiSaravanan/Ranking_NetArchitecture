@@ -1,6 +1,7 @@
 """An implementation of aNMM Model."""
 
 import matchzoo as mz
+import numpy as np
 import tensorflow
 import keras
 from keras.activations import softmax
