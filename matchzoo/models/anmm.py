@@ -53,10 +53,6 @@ class ANMM(BaseModel):
         # doc is [batch_size, right_text_len, bin_num]
         query, doc = self._make_inputs()
         embedding = self._make_embedding_layer()
-        
-        print('Printing doc output here .......')
-        print(type(doc))
-        print(doc)
 
         q_embed0 = embedding(query)
         
