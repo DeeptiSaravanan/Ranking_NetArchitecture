@@ -1,6 +1,7 @@
 """An implementation of aNMM Model."""
 
 import matchzoo as mz
+import tensorflow
 import keras
 from keras.activations import softmax
 from keras.initializers import RandomUniform
@@ -56,36 +57,36 @@ class ANMM(BaseModel):
 
         q_embed0 = embedding(query)
         
-        d_bin0 = keras.layers.Dropout(
+        d_bin0 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(doc)
             
         #frequency vector
         
         freq_vec = np.ones(d_bin0.shape)
         
-        d_bin1 = keras.layers.Dropout(
+        d_bin1 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(freq_vec)
             
-        dbin = keras.layers.Concatenate()([d_bin0, d_bin1])
+        dbin = tensorflow.keras.layers.Concatenate()([d_bin0, d_bin1])
         
         for layer_id in range(self._params['num_layers'] - 1):
-            d_bin = keras.layers.Dense(
+            d_bin = tensorflow.keras.layers.Dense(
                 self._params['hidden_sizes'][layer_id],
                 kernel_initializer=RandomUniform())(d_bin)
-            d_bin = keras.layers.Activation('tanh')(d_bin)
+            d_bin = tensorflow.keras.layers.Activation('tanh')(d_bin)
         
-        d_bin = keras.layers.Dense(
+        d_bin = tensorflow.keras.layers.Dense(
             self._params['hidden_sizes'][self._params['num_layers'] - 1])(
             d_bin)
         one_vec = np.ones(d_bin.shape)
         
         one_tensors = tf.convert_to_tensor(one_vec)
         
-        d_one_tensors = keras.layers.Reshape((d_bin,))(one_tensors)
-        q_one_tensors = keras.layers.Reshape((q_attention,))(one_tensors)
+        d_one_tensors = tensorflow.keras.layers.Reshape((d_bin,))(one_tensors)
+        q_one_tensors = tensorflow.keras.layers.Reshape((q_attention,))(one_tensors)
         
         # Score 1
-        score0 = keras.layers.Dot(axes=[1, 1])([d_bin, d_one_tensors])
+        score0 = tensorflow.keras.layers.Dot(axes=[1, 1])([d_bin, d_one_tensors])
         x_out0 = self._make_output_layer()(score0)
         
         pos_vec = x_out0
@@ -96,23 +97,23 @@ class ANMM(BaseModel):
         				pos_vec[piter] = 1/float(pind)
         				piter = piter + 1
         
-        q_embed1 = keras.layers.Dropout(
+        q_embed1 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(pos_vec)
         
-        q_embed = keras.layers.Concatenate()([q_embed0, q_embed1])
+        q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
         
-        q_attention = keras.layers.Dense(
+        q_attention = tensorflow.keras.layers.Dense(
             1, kernel_initializer=RandomUniform(), use_bias=False)(q_embed)
         q_text_len = self._params['input_shapes'][0][0]
         q_text_len = 2 * q_text_len
 
-        q_attention = keras.layers.Lambda(
+        q_attention = tensorflow.keras.layers.Lambda(
             lambda x: softmax(x, axis=1),
             output_shape=(q_text_len,)
         )(q_attention)
         
         # Score 2
-        score = keras.layers.Dot(axes=[1, 1])([q_attention, q_one_tensors])
+        score = tensorflow.keras.layers.Dot(axes=[1, 1])([q_attention, q_one_tensors])
         x_out = self._make_output_layer()(score)
         
         self._backend = keras.Model(inputs=[query, doc], outputs=x_out)
