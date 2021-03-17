@@ -107,10 +107,10 @@ class ANMM(BaseModel):
         #q_embed0 =  tensorflow.reshape(q_embed0, shape=[None, 1, 300])
         #q_embed0 = embedding(q_embed0)
         q_embed1 = embedding(score0)
-        q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
+        #q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
         
         q_attention = tensorflow.keras.layers.Dense(
-            1, kernel_initializer=RandomUniform(), use_bias=False)(q_embed)
+            1, kernel_initializer=RandomUniform(), use_bias=False)(q_embed0)
         q_text_len = self._params['input_shapes'][0][0]
 
         q_attention = tensorflow.keras.layers.Lambda(
@@ -119,7 +119,7 @@ class ANMM(BaseModel):
         )(q_attention)
         
         # Score 2
-        score = tensorflow.keras.layers.Dot(axes=[1, 1])([q_attention, q_one_tensors])
+        score = tensorflow.keras.layers.Dot(axes=[1, 1])([q_attention, q_embed1])
         x_out = self._make_output_layer()(score)
         
         self._backend = tensorflow.keras.Model(inputs=[query, doc, freq_vec, d_one_tensors, q_one_tensors], outputs=x_out)
