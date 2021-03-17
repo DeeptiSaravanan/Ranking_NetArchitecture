@@ -8,7 +8,8 @@ import dill
 import numpy as np
 import tensorflow
 import keras
-import keras.backend as K
+#import keras.backend as K
+import tensorflow.keras.backend as K
 import pandas as pd
 
 import matchzoo
@@ -283,7 +284,8 @@ class BaseModel(abc.ABC):
         y: np.ndarray,
         batch_size: int = 128
     ) -> typing.Dict[BaseMetric, float]:
-        """
+        """hape=self._params['input_shapes'][0]
+
         Evaluate the model.
 
         :param x: Input data.
@@ -495,17 +497,32 @@ class BaseModel(abc.ABC):
             if verbose:
                 print(f"Parameter \"{name}\" set to {default_val}.")
 
+				
     def _make_inputs(self) -> list:
         input_left = tensorflow.keras.layers.Input(
             name='text_left',
-            shape=self._params['input_shapes'][0]
+            #shape=self._params['input_shapes'][0]
+            #shape=self._params['input_shapes'][0]
+            shape=(1,)
         )
-        input_right = keras.layers.Input(
+        input_right = tensorflow.keras.layers.Input(
             name='text_right',
             shape=self._params['input_shapes'][1]
         )
-        return [input_left, input_right]
-
+        input_freq = tensorflow.keras.layers.Input(
+            name='text_freq',
+            shape=self._params['input_shapes'][1]
+        )
+        dot_right = tensorflow.keras.layers.Input(
+            name='dot_right',
+            shape=self._params['input_shapes'][1]
+        )
+        dot_left = tensorflow.keras.layers.Input(
+            name='dot_left',
+            shape=(1,)
+        )
+        return [input_left, input_right, input_freq, dot_right, dot_left]
+        
     def _make_output_layer(self) -> tensorflow.keras.layers.Layer:
         """:return: a correctly shaped keras dense layer for model output."""
         task = self._params['task']
