@@ -63,7 +63,7 @@ class ANMM(BaseModel):
             
         #frequency vector
         
-        freq_vec = np.ones(100)
+        freq_vec = np.ones(100, dtype=int)
         
         d_bin1 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(freq_vec)
@@ -83,7 +83,7 @@ class ANMM(BaseModel):
         d_bin = tensorflow.keras.layers.Dense(
             self._params['hidden_sizes'][self._params['num_layers'] - 1])(
             d_bin)
-        one_vec = np.ones(100)
+        one_vec = np.ones(100, dtype=int)
         
         one_tensors = tensorflow.convert_to_tensor(one_vec)
         
