@@ -85,7 +85,7 @@ class ANMM(BaseModel):
             d_bin)
         one_vec = np.ones(100)
         
-        one_tensors = tf.convert_to_tensor(one_vec)
+        one_tensors = tensorflow.convert_to_tensor(one_vec)
         
         one_tensors = tensorflow.cast(one_tensors, tf.int32)
         
