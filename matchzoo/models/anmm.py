@@ -82,7 +82,7 @@ class ANMM(BaseModel):
         
         # Score 1
         score0 = tensorflow.keras.layers.Dot(axes=[1, 1])([d_bin, d_one_tensors])
-        x_out0 = self._make_output_layer()(score0)
+        #x_out0 = self._make_output_layer()(score0)
         '''
         pos_vec = x_out0
         x_out0 = tensorflow.sort(x_out0, axis=1, direction='DESCENDING', name=None)
@@ -100,13 +100,13 @@ class ANMM(BaseModel):
         
         #q_embed1 = tensorflow.keras.layers.Reshape((q_embed0,))(q_embed1)
         '''
-        #q_embed0 = embedding(query)
-        q_embed0 = tensorflow.keras.layers.Dropout(
-            rate=self._params['dropout_rate'])(query)
+        q_embed0 = embedding(query)
+        #q_embed0 = tensorflow.keras.layers.Dropout(
+        #    rate=self._params['dropout_rate'])(query)
         #q_embed0 = tensorflow.reshape(q_embed0, [None, 1])
-        q_embed0 =  tensorflow.reshape(q_embed0, shape=tensorflow.constant([None, 1]))
-        q_embed0 = embedding(q_embed0)
-        q_embed1 = embedding(x_out0)
+        q_embed0 =  tensorflow.reshape(q_embed0, shape=tensorflow.constant([None, 1, 300]))
+        #q_embed0 = embedding(q_embed0)
+        q_embed1 = embedding(score0)
         q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
         
         q_attention = tensorflow.keras.layers.Dense(
