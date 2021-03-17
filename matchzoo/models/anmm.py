@@ -87,7 +87,7 @@ class ANMM(BaseModel):
         x_out0 = self._make_output_layer()(score0)
         
         pos_vec = x_out0
-        x_out0 = tensorflow.sort(x_out0, axis=-1, direction='DESCENDING', name=None)
+        x_out0 = tensorflow.sort(x_out0, axis=1, direction='DESCENDING', name=None)
         
         piter=0
         for positionv in pos_vec:
