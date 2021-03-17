@@ -53,7 +53,7 @@ class ANMM(BaseModel):
         """
         # query is [batch_size, left_text_len]
         # doc is [batch_size, right_text_len, bin_num]
-        query, doc = self._make_inputs()
+        query, doc, freq_vec, d_one_tensors, q_one_tensors = self._make_inputs()
         embedding = self._make_embedding_layer()
 
         q_embed0 = embedding(query)
@@ -62,8 +62,6 @@ class ANMM(BaseModel):
             rate=self._params['dropout_rate'])(doc)
             
         #frequency vector
-        
-        freq_vec = np.ones(100, dtype=int)
         
         d_bin1 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(freq_vec)
@@ -83,14 +81,6 @@ class ANMM(BaseModel):
         d_bin = tensorflow.keras.layers.Dense(
             self._params['hidden_sizes'][self._params['num_layers'] - 1])(
             d_bin)
-        one_vec = np.ones(100, dtype=int)
-        
-        one_tensors = tensorflow.convert_to_tensor(one_vec)
-        
-        #one_tensors = tensorflow.cast(one_tensors, tensorflow.int32)
-        
-        d_one_tensors = tensorflow.keras.layers.Reshape((d_bin,))(one_tensors)
-        q_one_tensors = tensorflow.keras.layers.Reshape((q_attention,))(one_tensors)
         
         # Score 1
         score0 = tensorflow.keras.layers.Dot(axes=[1, 1])([d_bin, d_one_tensors])
