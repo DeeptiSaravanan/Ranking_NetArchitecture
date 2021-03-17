@@ -103,7 +103,8 @@ class ANMM(BaseModel):
         #q_embed0 = embedding(query)
         q_embed0 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(query)
-        q_embed0 = tensorflow.reshape(q_embed0, [None, 1])
+        #q_embed0 = tensorflow.reshape(q_embed0, [None, 1])
+        q_embed0 =  tf.reshape(q_embed0, shape=tf.constant([None, 1]))
         q_embed0 = embedding(q_embed0)
         q_embed1 = embedding(x_out0)
         q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
