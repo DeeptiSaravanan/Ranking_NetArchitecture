@@ -68,7 +68,7 @@ class ANMM(BaseModel):
         d_bin1 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(freq_vec)
         
-        d_bin1 = tensorflow.cast(d_bin1, tensorflow.int32)
+        #d_bin1 = tensorflow.cast(d_bin1, tensorflow.int32)
         
         d_bin1 = tensorflow.keras.layers.Reshape((d_bin0,))(d_bin1)
             
@@ -87,7 +87,7 @@ class ANMM(BaseModel):
         
         one_tensors = tensorflow.convert_to_tensor(one_vec)
         
-        one_tensors = tensorflow.cast(one_tensors, tensorflow.int32)
+        #one_tensors = tensorflow.cast(one_tensors, tensorflow.int32)
         
         d_one_tensors = tensorflow.keras.layers.Reshape((d_bin,))(one_tensors)
         q_one_tensors = tensorflow.keras.layers.Reshape((q_attention,))(one_tensors)
