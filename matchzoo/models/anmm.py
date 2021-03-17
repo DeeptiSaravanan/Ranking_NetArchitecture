@@ -70,7 +70,7 @@ class ANMM(BaseModel):
         
         #d_bin1 = tensorflow.keras.layers.Reshape((d_bin0,))(d_bin1)
             
-        dbin = tensorflow.keras.layers.Concatenate()([d_bin0, d_bin1])
+        d_bin = tensorflow.keras.layers.Concatenate()([d_bin0, d_bin1])
         
         for layer_id in range(self._params['num_layers'] - 1):
             d_bin = tensorflow.keras.layers.Dense(
