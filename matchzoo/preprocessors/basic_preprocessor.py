@@ -56,7 +56,7 @@ class BasicPreprocessor(BasePreprocessor):
 
     """
 
-    def __init__(self, fixed_length_left: int = 30,
+    def __init__(self, fixed_length_left: int = 1,
                  fixed_length_right: int = 30,
                  filter_mode: str = 'df',
                  filter_low_freq: float = 2,
