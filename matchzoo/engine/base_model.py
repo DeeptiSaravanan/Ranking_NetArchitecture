@@ -498,7 +498,8 @@ class BaseModel(abc.ABC):
     def _make_inputs(self) -> list:
         input_left = tensorflow.keras.layers.Input(
             name='text_left',
-            shape=self._params['input_shapes'][0]
+            #shape=self._params['input_shapes'][0]
+            shape=(1,)
         )
         input_right = tensorflow.keras.layers.Input(
             name='text_right',
@@ -514,7 +515,7 @@ class BaseModel(abc.ABC):
         )
         dot_left = tensorflow.keras.layers.Input(
             name='dot_left',
-            shape=self._params['input_shapes'][0]
+            shape=(1,)
         )
         return [input_left, input_right, input_freq, dot_right, dot_left]
 
