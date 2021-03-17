@@ -68,7 +68,7 @@ class ANMM(BaseModel):
         
         #d_bin1 = tensorflow.cast(d_bin1, tensorflow.int32)
         
-        d_bin1 = tensorflow.keras.layers.Reshape((d_bin0,))(d_bin1)
+        #d_bin1 = tensorflow.keras.layers.Reshape((d_bin0,))(d_bin1)
             
         dbin = tensorflow.keras.layers.Concatenate()([d_bin0, d_bin1])
         
@@ -91,13 +91,14 @@ class ANMM(BaseModel):
         piter=0
         for positionv in pos_vec:
         				pind = x_out0.index(positionv)
-        				pos_vec[piter] = 1/float(pind)
+        				pos_vec[piter] = int(1/float(pind))
         				piter = piter + 1
         
+        pos_vec = embedding(pos_vec)
         q_embed1 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(pos_vec)
         
-        q_embed1 = tensorflow.keras.layers.Reshape((q_embed0,))(q_embed1)
+        #q_embed1 = tensorflow.keras.layers.Reshape((q_embed0,))(q_embed1)
         
         q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
         
