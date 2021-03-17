@@ -63,10 +63,12 @@ class ANMM(BaseModel):
             
         #frequency vector
         
-        freq_vec = np.ones((None, 30))
+        freq_vec = np.ones(100)
         
         d_bin1 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(freq_vec)
+        
+        d_bin1 = tensorflow.keras.layers.Reshape((d_bin0,))(d_bin1)
             
         dbin = tensorflow.keras.layers.Concatenate()([d_bin0, d_bin1])
         
@@ -79,7 +81,7 @@ class ANMM(BaseModel):
         d_bin = tensorflow.keras.layers.Dense(
             self._params['hidden_sizes'][self._params['num_layers'] - 1])(
             d_bin)
-        one_vec = np.ones(d_bin.shape)
+        one_vec = np.ones(100)
         
         one_tensors = tf.convert_to_tensor(one_vec)
         
@@ -100,6 +102,8 @@ class ANMM(BaseModel):
         
         q_embed1 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(pos_vec)
+        
+        q_embed1 = tensorflow.keras.layers.Reshape((q_embed0,))(q_embed1)
         
         q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
         
