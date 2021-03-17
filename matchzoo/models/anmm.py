@@ -55,8 +55,6 @@ class ANMM(BaseModel):
         # doc is [batch_size, right_text_len, bin_num]
         query, doc, freq_vec, d_one_tensors, q_one_tensors = self._make_inputs()
         embedding = self._make_embedding_layer()
-
-        q_embed0 = embedding(query)
         
         d_bin0 = tensorflow.keras.layers.Dropout(
             rate=self._params['dropout_rate'])(doc)
@@ -102,7 +100,9 @@ class ANMM(BaseModel):
         
         #q_embed1 = tensorflow.keras.layers.Reshape((q_embed0,))(q_embed1)
         '''
-        q_embed0 = tensorflow.reshape(q_embed0, [-1])
+        #q_embed0 = embedding(query)
+        q_embed0 = tensorflow.reshape(query, [None, 1])
+        q_embed0 = embedding(q_embed0)
         q_embed1 = embedding(x_out0)
         q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
         
