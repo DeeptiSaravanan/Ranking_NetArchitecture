@@ -102,7 +102,8 @@ class ANMM(BaseModel):
         
         #q_embed1 = tensorflow.keras.layers.Reshape((q_embed0,))(q_embed1)
         '''
-        q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, x_out0])
+        q_embed1 = embedding(x_out0)
+        q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
         
         q_attention = tensorflow.keras.layers.Dense(
             1, kernel_initializer=RandomUniform(), use_bias=False)(q_embed)
