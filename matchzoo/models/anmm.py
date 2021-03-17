@@ -85,12 +85,13 @@ class ANMM(BaseModel):
         # Score 1
         score0 = tensorflow.keras.layers.Dot(axes=[1, 1])([d_bin, d_one_tensors])
         x_out0 = self._make_output_layer()(score0)
-        
+        '''
         pos_vec = x_out0
         x_out0 = tensorflow.sort(x_out0, axis=1, direction='DESCENDING', name=None)
         
         piter=0
         for positionv in pos_vec:
+            pind = tensorflow.where([], x=None, y=None, name=None)
         				pind = x_out0.index(positionv)
         				pos_vec[piter] = int(1/float(pind))
         				piter = piter + 1
@@ -100,8 +101,8 @@ class ANMM(BaseModel):
             rate=self._params['dropout_rate'])(pos_vec)
         
         #q_embed1 = tensorflow.keras.layers.Reshape((q_embed0,))(q_embed1)
-        
-        q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
+        '''
+        q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, x_out0])
         
         q_attention = tensorflow.keras.layers.Dense(
             1, kernel_initializer=RandomUniform(), use_bias=False)(q_embed)
