@@ -112,7 +112,6 @@ class ANMM(BaseModel):
         q_attention = tensorflow.keras.layers.Dense(
             1, kernel_initializer=RandomUniform(), use_bias=False)(q_embed)
         q_text_len = self._params['input_shapes'][0][0]
-        q_text_len = 2 * q_text_len
 
         q_attention = tensorflow.keras.layers.Lambda(
             lambda x: softmax(x, axis=1),
