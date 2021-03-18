@@ -148,18 +148,17 @@ class ANMM(BaseModel):
             
         q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
         
-        for layer_id in range(self._params['num_layers'] - 1):
-            q_embed = tensorflow.keras.layers.Dense(
-                self._params['hidden_sizes'][layer_id],
-                kernel_initializer=RandomUniform())(q_embed)
-            q_embed = tensorflow.keras.layers.Activation('tanh')(q_embed)
-        
-        q_embed = tensorflow.keras.layers.Dense(
-            self._params['hidden_sizes'][self._params['num_layers'] - 1])(
-            q_embed)
+        q_attention = tensorflow.keras.layers.Dense(
+            1, kernel_initializer=RandomUniform(), use_bias=False)(q_embed)
+        q_text_len = self._params['input_shapes'][0][0]
+
+        q_attention = tensorflow.keras.layers.Lambda(
+            lambda x: softmax(x, axis=1),
+            output_shape=(q_text_len,)
+        )(q_attention)
         
         # Score 1
-        score = tensorflow.keras.layers.Dot(axes=[1, 1])([q_embed, q_one_tensors])
+        score = tensorflow.keras.layers.Dot(axes=[1, 1])([q_attention, q_one_tensors])
         x_out = self._make_output_layer()(score)
         
         self._backend = tensorflow.keras.Model(inputs=[query, doc, freq_vec, d_one_tensors, q_one_tensors], outputs=x_out)
