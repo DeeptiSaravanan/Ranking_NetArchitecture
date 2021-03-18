@@ -504,7 +504,7 @@ class BaseModel(abc.ABC):
             name='text_left',
             #shape=self._params['input_shapes'][0]
             #shape=self._params['input_shapes'][0]
-            shape=(1,)
+            shape=self._params['input_shapes'][0]
         )
         input_right = tensorflow.keras.layers.Input(
             name='text_right',
@@ -521,7 +521,7 @@ class BaseModel(abc.ABC):
         )
         dot_left = tensorflow.keras.layers.Input(
             name='dot_left',
-            shape=(1,)
+            shape=self._params['input_shapes'][0]
         )
         return [input_left, input_right, input_freq, dot_right, dot_left]
         
