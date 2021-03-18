@@ -508,17 +508,16 @@ class BaseModel(abc.ABC):
         )
         input_right = tensorflow.keras.layers.Input(
             name='text_right',
-            shape=(15,)
+            shape=self._params['input_shapes'][1]
         )
         input_freq = tensorflow.keras.layers.Input(
             name='text_freq',
-	    shape=(15,)
-            #shape=self._params['input_shapes'][1]/2
+            shape=self._params['input_shapes'][1]
 	
         )
         dot_right = tensorflow.keras.layers.Input(
             name='dot_right',
-            shape=(30,)
+            shape=(60,)
         )
         dot_left = tensorflow.keras.layers.Input(
             name='dot_left',
