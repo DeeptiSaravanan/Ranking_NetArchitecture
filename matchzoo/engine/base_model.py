@@ -517,7 +517,7 @@ class BaseModel(abc.ABC):
         )
         dot_right = tensorflow.keras.layers.Input(
             name='dot_right',
-            shape=(60,)
+            shape=self._params['input_shapes'][1]
         )
         dot_left = tensorflow.keras.layers.Input(
             name='dot_left',
