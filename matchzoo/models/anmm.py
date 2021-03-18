@@ -108,7 +108,7 @@ class ANMM(BaseModel):
         #q_embed0 = embedding(q_embed0)
         q_embed1 = embedding(score0)
         #q_embed = tensorflow.keras.layers.Concatenate()([q_embed0, q_embed1])
-        
+        '''
         q_attention = tensorflow.keras.layers.Dense(
             1, kernel_initializer=RandomUniform(), use_bias=False)(q_embed0)
         q_text_len = self._params['input_shapes'][0][0]
@@ -117,9 +117,20 @@ class ANMM(BaseModel):
             lambda x: softmax(x, axis=1),
             output_shape=(q_text_len,)
         )(q_attention)
+        '''
+        
+        for layer_id in range(self._params['num_layers'] - 1):
+            q_embed0 = tensorflow.keras.layers.Dense(
+                self._params['hidden_sizes'][layer_id],
+                kernel_initializer=RandomUniform())(q_embed0)
+            q_embed0 = tensorflow.keras.layers.Activation('tanh')(q_embed0)
+        
+        q_embed0 = tensorflow.keras.layers.Dense(
+            self._params['hidden_sizes'][self._params['num_layers'] - 1])(
+            q_embed0)
         
         # Score 2
-        score = tensorflow.keras.layers.Dot(axes=[1, 1])([q_attention, q_embed1])
+        score = tensorflow.keras.layers.Dot(axes=[1, 1])([q_embed0, q_embed1])
         x_out = self._make_output_layer()(score)
         
         self._backend = tensorflow.keras.Model(inputs=[query, doc, freq_vec, d_one_tensors, q_one_tensors], outputs=x_out)
